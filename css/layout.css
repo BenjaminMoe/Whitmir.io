@@ -119,6 +119,12 @@ header div.profile-menu.hide {
 
 }
 
+header div.profile-menu a {
+
+	text-decoration: none;
+
+}
+
 header div.profile-menu li {
 
 	list-style: none;
