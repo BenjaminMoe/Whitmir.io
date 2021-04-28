@@ -1,0 +1,901 @@
+* {
+	
+	scrollbar-width: thin;
+	scrollbar-color: #4c6fff rgba(0, 0, 0, 0.2);
+
+}
+
+html {
+
+	padding: 0;
+	margin: 0;
+	height: 100%;
+
+}
+
+body {
+
+	padding: 0;
+	margin: 0;
+	height: 100%;
+	font-family: 'Montserrat', sans-serif;
+
+}
+
+main {
+
+	padding: 0;
+	margin: 0;
+	height: 100%;
+
+	--header-height: 60px;
+	--folder-width: 320px;
+	--tray-width: 400px;
+
+}
+
+header div.login {
+
+	position : absolute;
+	right : 8px;
+	top : 10px;
+	z-index : 50;
+	text-align : right;
+
+}
+
+header div.login.hide {
+
+	display: none;
+
+}
+
+header {
+
+	height: var(--header-height);
+	width: 100%;
+	background-color: #4c6fff;
+	position: relative;
+
+}
+
+header div.profile.hide {
+
+	display: none;
+
+}
+
+header div.profile {
+
+	background-color: rgba(255, 255, 255, 0.5);
+	width: 46px;
+	height: 46px;
+	top: 6px;
+	right: 8px;
+	border-radius: 100%;
+	display: block;
+	position: absolute;
+	/* background-image: url(../img/profile-alt.png); */
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 100%;
+
+}
+
+header div.profile.hide {
+
+	display: none;
+
+}
+
+header div.profile:hover {
+
+	cursor: pointer;
+
+}
+
+header div.profile-menu {
+
+	position: absolute;
+	right: 18px;
+	top: 54px;
+	width: 250px;
+	padding: 15px 10px;
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	min-height: 90px;
+	z-index: 40;
+	font-family: 'Poppins', sans-serif;
+	transition: transform 200ms, opacity 200ms;
+
+}
+
+header div.profile-menu.hide {
+
+	opacity: 0;
+	transform: translateY(-10px);
+	pointer-events: none;
+
+}
+
+header div.profile-menu li {
+
+	list-style: none;
+	font-size: 15px;
+	line-height: 28px;
+	font-weight: 400;
+	color: #313855;
+	border-radius: 4px;
+	text-indent: 8px;
+
+}
+
+header div.profile-menu li.a:hover {
+
+	cursor: pointer;
+	background-color: rgba(0,0,0,0.04);
+
+}
+
+header div.profile-menu li.link {
+
+	width: 100%;
+	text-align: center;
+	color: #4C6FFF;
+
+}
+
+header div.profile-menu li.link:hover {
+
+	cursor: pointer;
+	background-color: rgba(0,0,0,0.04);
+
+}
+
+header div.profile-menu b {
+
+	font-size: 16px;
+
+}
+
+header div.profile-menu a {
+
+	color: #4C6FFF;
+	font-size: 14px;
+	line-height: 24px;
+
+}
+
+header div.profile-menu div.line {
+
+	width: 100%;
+	height: 1px;
+	background-color: #e4e4e4;
+	margin : 14px 0;
+
+}
+
+header div.export {
+
+	width: 200px;
+	height: 36px;
+	line-height: 36px;
+	text-indent: 18px;
+	border: 1px solid #fff;
+	border-radius: 28px;
+	position: absolute;
+	top: 10px;
+	right: 84px;
+	font-size: 15px;
+	color: #fff;
+
+}
+
+header div.export.hide {
+
+	display: none;
+
+}
+
+header div.export:hover {
+
+	cursor: pointer;
+	background-color: rgba(255, 255, 255, 0.2);
+
+}
+
+header div.export-menu {
+
+	position: absolute;
+	right: 84px;
+	top: 54px;
+	width: 180px;
+	padding: 15px 10px;
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	min-height: 90px;
+	z-index: 40;
+	font-family: 'Poppins', sans-serif;
+	transition: transform 200ms, opacity 200ms;
+
+}
+
+header div.export-menu.hide {
+
+	opacity: 0;
+	transform: translateY(-10px);
+	pointer-events: none;
+
+}
+
+
+header div.export-menu b {
+
+	font-size: 15px;
+
+}
+
+header div.export-menu li {
+
+	list-style: none;
+	font-size: 15px;
+	color: #525E8F;
+	line-height: 30px;
+	text-indent: 4px;
+	display: block;
+	margin: auto;
+	border-radius: 5px;
+
+}
+
+header div.export-menu li:hover {
+
+	cursor: pointer;
+	background-color: rgba(0, 0, 0, 0.05);
+
+}
+
+header div.export div.dropdown {
+
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	top: 3px;
+	right: 4px;
+	border-radius: 100%;
+	line-height: 30px;
+	text-align: center;
+	text-indent: 0;
+	z-index: 5;
+
+}
+
+header div.export div.dropdown:hover {
+
+
+}
+
+header div.export div.dropdown:before {
+	
+	content: "";
+	display: block;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background-color: rgba(255, 255, 255, 0.05);
+	border-radius: 100%;
+	transform: scale(0,0);
+	transition: transform 200ms;
+
+}
+
+/*
+header div.export div.dropdown:hover:before {
+
+	transform: scale(1,1);
+
+}
+*/
+
+
+header img.logo {
+	
+	height: calc(100% - 30px);
+	position: absolute;
+	left: 10px;
+	top: 15px;
+
+}
+
+section {
+
+	position: relative;
+	width: 100%;
+	height: calc(100% - var(--header-height));
+
+}
+
+nav {
+
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: calc(var(--folder-width) - 1px);
+	border-right: 1px solid #dfdfdf;
+	height: 100%;
+
+	--settings-height: 60px;
+	font-family: 'Poppins', sans-serif;
+
+}
+
+nav div.settings-menu {
+
+	position: absolute;
+	left: 24px;
+	bottom: 54px;
+	width: 320px;
+	min-height: 120px;
+	background-color: #fff;
+	border-radius: 10px;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	z-index: 10;
+	transition: opacity 200ms, transform 200ms;
+
+}
+
+nav div.settings-menu.hide {
+
+	opacity: 0;
+	pointer-events: none;
+	transform: translateY(-10px);
+
+}
+
+nav div.settings-menu ul {
+
+	width: calc(100% - 20px);
+	padding: 15px 10px;
+	margin: 0;
+
+}
+
+nav div.settings-menu ul li {
+	
+	list-style:none;
+	font-size: 15px;
+	color: #313855;
+
+}
+
+nav div.settings-menu ul li.value {
+
+	padding-bottom: 10px;
+
+}
+
+nav div.settings-menu ul li.value select {
+
+	width: 80%;
+	border: none;
+	background-color: transparent;
+	color: #525E8F;
+	appearance: none;
+	border-radius: 5px;
+	padding: 4px 0;
+	text-indent: 8px;
+	font-size: 14px;
+
+}
+
+nav div.settings-menu ul li.value select:hover {
+
+	cursor: pointer;
+	background-color: rgba(0,0,0,0.05);
+
+}
+
+nav div.settings-menu h3 {
+
+	width: 100%;
+	padding: 14px 0;
+	margin: 0;
+	border-bottom: 1px solid #dfdfdf;
+	font-size: 18px;
+	font-weight: 500;
+	text-indent: 10px;
+
+}
+
+nav div.create {
+
+	padding-top: 20px;
+	background-color: #f0f2fb;
+
+}
+
+nav div.create button { 
+
+	width: 90%;
+	display: block;
+	margin: auto;
+	background-color: #4c6fff;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	border-radius: 25px;
+	color: #fff;
+	font-size: 18px;
+	padding: 14px 0;
+	border: none;
+
+}
+
+nav div.create span { 
+
+	display: block;
+	padding: 20px 0;
+	color: #7e8497;
+	font-size: 19px;
+	text-indent: 12px;
+
+}
+
+nav div.create span a:hover {
+
+	cursor: pointer;
+	color: #343a4d;
+
+}
+
+nav div.create span i { 
+
+	margin-right: 10px;
+
+}
+
+nav div.create div.category-menu {
+
+	padding: 0;
+	margin: 0;
+	border-bottom: 1px solid #dfdfdf;
+	max-height: 0px;
+	overflow: hidden;
+	transition: max-height 200ms;
+
+}
+
+nav div.create div.category-menu.open {
+
+	max-height: 300px;
+
+}
+
+nav div.create ul {
+
+	padding: 0;
+	margin: 0;
+	padding-bottom: 20px;
+
+}
+
+nav div.create ul li {
+
+	list-style:none;
+	width: 100%;
+	list-style: none;
+	position: relative;
+	text-indent: 20px;
+	color: #4a4a4a;
+	height: 34px;
+	line-height: 34px;
+	font-size: 15px;
+	margin: 5px 0;
+
+}
+
+nav div.create ul li:hover {
+
+	background-color: rgba(0,0,0,0.08);
+
+}
+
+nav div.create ul li input {
+
+	border: none;
+	background-color: transparent;
+
+}
+
+nav div.create ul li input:focus {
+
+	outline: none;
+	
+}
+
+nav div.create ul li div.btn {
+
+	position: absolute;
+	right: 4px;
+	top: 4px;
+	width: 26px;
+	height: 26px;
+	border-radius: 100%;
+	text-align: center;
+	line-height: 26px;
+	font-size: 14px;
+	text-indent: 0;
+	color: #8a8a8a;
+
+}
+
+nav div.create ul li div.btn:hover {
+
+	cursor: pointer;
+
+}
+
+nav div.create button:hover { 
+
+	cursor: pointer;
+	opacity: 0.7;
+
+}
+
+nav div.blogs h4 {
+	
+	margin: 0;
+	padding: 10px 0 4px;
+	text-indent: 12px;
+	color: #313855;
+	font-weight: 400;
+
+}
+
+nav div.blogs li {
+
+	list-style: none;
+	padding: 12px 0;
+	color: #8893bb;
+	font-size: 19px;
+	text-indent: 12px;
+	width: calc(100% - 8px);
+	border-top-right-radius: 30px;
+	border-bottom-right-radius: 30px;
+
+}
+
+nav div.blogs li.active {
+
+	color: #374886;
+	background-color: rgba(3, 44, 252, 0.1);
+
+}
+
+nav div.blogs li:hover {
+
+	cursor: pointer;
+	background-color: rgba(3, 44, 252, 0.1);
+
+}
+
+nav div.blogs li i {
+
+	margin-right: 10px;
+
+}
+
+nav div.settings {
+
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	height: var(--settings-height);
+	background-color: #fff;
+	border-top: 1px solid #dfdfdf;
+	width: 100%;
+
+}
+
+nav div.settings button {
+
+	position: absolute;
+	border: 1px solid #dfdfdf;
+	border-radius: 24px;
+	width: 70%;
+	padding: 8px 0;
+	text-align: left;
+	text-indent: 8px;
+	font-size: 22px;
+	left: 10px;
+	top: 8px;
+	color: #444e74;
+	border: 1px solid transparent;
+	background-color: transparent;
+
+}
+
+nav div.settings button:hover {
+
+	cursor: pointer;
+	background-color: rgba(0, 0, 0, 0.05);
+
+}
+
+nav div.settings button i {
+
+	margin-right: 10px;
+
+}
+
+aside {
+
+	position: absolute;
+	left: var(--folder-width);
+	top: 0;
+	width: calc(var(--tray-width) - 1px);
+	border-right: 1px solid #dfdfdf;
+	height: 100%;
+	font-family: 'Poppins', sans-serif;
+
+	--create-height: 60px;
+
+}
+
+aside div.create {
+
+	height: calc(var(--create-height) - 1px);
+	border-bottom: 1px solid #dfdfdf;
+	background-color: #fff;
+
+}
+
+aside div.create table {
+
+	width: 100%;
+	height: 100%;
+	table-layout: fixed;
+	border-collapse: collapse;
+
+}
+
+aside div.create table tr td:first-child {
+
+	width: 40%;
+
+}
+
+aside div.create table h3 {
+	
+	padding: 0;
+	margin: 0;
+	font-weight: 500;
+	padding-left: 20px;
+	font-size: 22px;
+
+}
+
+aside div.create table button {
+
+	background-color: #e5eaff;
+	border: none;
+	display: block;
+	margin: auto;
+	width: 70%;
+	padding: 8px 0;
+	border-radius: 25px;
+	color: #4C6FFF;
+	font-size: 17px;
+
+}
+
+aside div.create table button:hover {
+
+	cursor: pointer;
+	opacity: 0.7;
+
+}
+
+aside div.posts {
+
+	width: 100%;
+	height: calc(100% - var(--create-height));
+	overflow-y: auto;
+
+}
+
+aside div.posts div.padding {
+
+
+}
+
+aside div.posts li {
+
+	padding: 18px 0;
+	font-size: 17px;
+	border-bottom: 1px solid #dfdfdf;
+	text-indent: 20px;
+	color: #313855;
+	border-right: 6px solid transparent;
+
+}
+
+aside div.posts li.active {
+
+	background-color: #ebefff;
+	border-right-color: #4c6fff;
+
+}
+
+aside div.posts li:hover {
+
+	cursor: pointer;
+	background-color: #ebefff;
+
+}
+
+article {
+
+	position: absolute;
+	left: calc(var(--folder-width) + var(--tray-width));
+	top: 0;
+	height: 100%;
+	width: calc(100% - var(--folder-width) - var(--tray-width));
+	background-color: #f5f7ff;
+	--toolbar-height: 60px;
+
+}
+
+article div.toolbar {
+	
+	height: calc(var(--toolbar-height) - 1px);
+	width: 100%;
+	background-color: #fff;
+	border-bottom: 1px solid #dfdfdf;
+
+}
+
+article div.toolbar table {
+
+	width: 100%;
+	height : 100%;
+	table-layout: fixed;
+	border-collapse: collapse;
+
+}
+
+article div.toolbar table td.btn {
+
+	width: 44px;
+
+}
+
+article div.toolbar table td.btn button {
+
+	display: block;
+	margin: auto;
+	width: 96%;
+	display: block;
+	border: none;
+	border-radius: 5px;
+	background-color: transparent;
+	padding: 10px 0;
+	font-size: 16px;
+
+}
+
+article div.toolbar table td.btn button.img {
+
+	font-size: 20px;
+
+}
+
+article div.toolbar table td.btn button:hover {
+
+	cursor: pointer;
+	color: #06c;
+
+}
+
+article div.toolbar table td.split {
+
+	width: 5px;
+
+}
+
+article div.toolbar table td.split div.line {
+
+	height: 20px;
+	width: 1px;
+	background-color: #bababa;
+	display: block;
+	margin: auto;
+
+}
+
+article div.toolbar table td.status {
+
+	width: 140px;
+
+}
+
+article div.toolbar table td.status div.select {
+
+	width: 96%;
+	height: 32px;
+	line-height: 32px;
+	font-size: 13px;
+	text-indent: 8px;
+	background-color: #f2f2f2;
+	border-radius: 5px;
+	display: block;
+	margin: auto;
+	position: relative;
+
+}
+
+article div.toolbar table td.status div.select i {
+
+	position: absolute;
+	right: 10px;
+	top: 10px;
+
+}
+
+article div.page-content {
+
+	width: 100%;
+	height: calc(100% - var(--toolbar-height));
+	overflow-y: scroll;
+	font-size: 18px !important;
+
+}
+
+article div.page-content h2 {
+
+	padding: 0;
+	margin: 0;
+	font-size: 24px;
+
+}
+
+article div.page-content div.meta {
+
+	padding: 20px 0;
+	font-size: 15px;
+	color: #546092;
+
+}
+
+article div.page-content div.meta li {
+
+	list-style: none;
+	line-height: 26px;
+
+}
+
+article div.padding-top {
+
+	height: calc(var(--toolbar-height) + 20px);
+
+}
+
+article div.padding-bottom {
+
+	height: calc(var(--toolbar-height) + 20px);
+
+}
+
+article div.page {
+
+	width: 900px;
+	padding: 30px 40px;
+	border-radius: 4px;
+	display: block;
+	margin: auto;
+	background-color: #fff;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+
+}
