@@ -35,7 +35,8 @@ const Session = (function() {
 	this.API = {
 		loadClient : api_loadClient.bind(this),
 		initClient : api_initClient.bind(this),
-		updateSigninStatus : api_updateSigninStatus.bind(this)
+		updateSigninStatus : api_updateSigninStatus.bind(this),
+		initFolder : api_initFolder.bind(this)
 	}
 
 	init.apply(this);
@@ -50,7 +51,7 @@ const Session = (function() {
 
 	function evt_handleAuthClick() {
 		
-		if(!this.ready) {
+		if(!this.MEM.ready) {
 			return;
 		}
 		
@@ -60,7 +61,7 @@ const Session = (function() {
 
 	function evt_handleSignoutClick() {
 		
-		if(!this.ready) {
+		if(!this.MEM.ready) {
 			return;
 		}
 
@@ -92,12 +93,60 @@ const Session = (function() {
 	function api_updateSigninStatus(isSignedIn) {
 		
 		if(isSignedIn) {
+			this.API.initFolder();
 			this.DOM.btn.authorize.style.display = 'none';
 			this.DOM.btn.signout.style.display = 'block';
 		} else {
+			this.MEM = {}
 			this.DOM.btn.authorize.style.display = 'block';
 			this.DOM.btn.signout.style.display = 'none';
 		}
+
+	}
+
+	async function api_initFolder() {
+
+		let query = {
+			q : `name = 'whitmir.io' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
+			pageSize : 10
+		}
+		
+		let res;
+		try {
+			res = await gapi.client.drive.files.list(query);
+		} catch(err) {
+			throw err;
+		}
+		
+		if(res.status !== 200) {
+			throw res.body;
+		}
+		
+		let data = JSON.parse(res.body);
+		if(data.files.length !== 0) {
+			this.MEM.folder = data.files[0].id;
+		} else {
+			// Otherwise we have to make a new folder
+			query = {
+				resource : {
+					name : 'whitmir.io',
+					mimeType : 'application/vnd.google-apps.folder'
+				},
+				fields : 'id'
+			};
+
+			let file;
+			
+			try {
+				file = await gapi.client.drive.files.create(query);
+			} catch(err) {
+				throw err;
+			}
+		
+			this.MEM.folder = JSON.parse(file.body).id;
+		}
+		
+		console.log(this.MEM.folder);
 
 	}
 
