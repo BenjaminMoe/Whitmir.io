@@ -38,7 +38,8 @@ const Session = (function() {
 		initClient : api_initClient.bind(this),
 		updateSigninStatus : api_updateSigninStatus.bind(this),
 		initFolder : api_initFolder.bind(this),
-		initConfig : api_initConfig.bind(this)
+		initConfig : api_initConfig.bind(this),
+		updateConfig : api_updateConfig.bind(this)
 	}
 
 	init.apply(this);
@@ -165,6 +166,8 @@ const Session = (function() {
 
 	}
 
+	// Ref: https://stackoverflow.com/questions/67326520/google-drive-api-creates-empty-untitled-file-with-browser-version/67327933#67327933
+
 	async function api_initConfig() {
 
 		let query = {
@@ -188,7 +191,7 @@ const Session = (function() {
 		
 		// If no config file is found, then we create one
 		if(data.files.length === 0) {
-			
+		
 			this.MEM.config = {
 				categories : {},
 				createdOn : Date.now()
@@ -221,10 +224,54 @@ const Session = (function() {
 				throw err;
 			}
 
-			console.log(res.json());
+			res = await res.json();
+			this.MEM.config.id = res.id;
+			this.API.updateConfig();
+
+		} else {
+			
+			console.log("Config file found!!!");
+
+			let file = await gapi.client.drive.files.get({
+				fileId: data.files[0].id,
+				alt: 'media'
+			})
+
+			this.MEM.config = JSON.parse(file.body);
+			
+			console.log(this.MEM.config);
+			if(!this.MEM.config.id) {
+				this.MEM.config.id = data.files[0].id;
+				this.API.updateConfig();
+			}
 
 		}
 
 	}
+
+	// Ref: https://stackoverflow.com/questions/40600725/google-drive-api-v3-javascript-update-file-contents
+	async function api_updateConfig() {
+	
+		const url = `https://www.googleapis.com/upload/drive/v3/files/${this.MEM.config.id}?uploadType=media&`;
+
+		const opts = {
+			method: 'PATCH',
+			headers: new Headers({'Authorization': 'Bearer ' + gapi.auth.getToken().access_token}),
+			body: JSON.stringify(this.MEM.config, null, 2)
+		}
+
+		let res;
+
+		try {
+			res = await fetch(url, opts);
+		} catch(err) {
+			throw err;
+		}
+
+		res = await res.json();
+		console.log(res);
+
+	}
+
 
 }).apply({});
