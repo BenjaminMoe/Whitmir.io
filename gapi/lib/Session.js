@@ -7,7 +7,8 @@ const CREDENTIALS = {
 		'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'
 	],
 	scope : [
-		'https://www.googleapis.com/auth/drive.metadata.readonly'
+		'https://www.googleapis.com/auth/drive.metadata.readonly',
+		'https://www.googleapis.com/auth/drive.file'
 	].join(' ')
 };
 
@@ -36,7 +37,8 @@ const Session = (function() {
 		loadClient : api_loadClient.bind(this),
 		initClient : api_initClient.bind(this),
 		updateSigninStatus : api_updateSigninStatus.bind(this),
-		initFolder : api_initFolder.bind(this)
+		initFolder : api_initFolder.bind(this),
+		initConfig : api_initConfig.bind(this)
 	}
 
 	init.apply(this);
@@ -51,6 +53,8 @@ const Session = (function() {
 
 	function evt_handleAuthClick() {
 		
+		console.log(this.MEM);
+		
 		if(!this.MEM.ready) {
 			return;
 		}
@@ -61,10 +65,13 @@ const Session = (function() {
 
 	function evt_handleSignoutClick() {
 		
+		console.log(this.MEM);
+
 		if(!this.MEM.ready) {
 			return;
 		}
-
+		
+		console.log('signout!!!');
 		gapi.auth2.getAuthInstance().signOut();
 
 	}
@@ -77,13 +84,17 @@ const Session = (function() {
 
 	async function api_initClient () {
 		
+		console.log('init client!!');
+
 		try {
 			await gapi.client.init(CREDENTIALS);
 		} catch(err) {
 			throw err;
 		}
 
-		this.ready = true;
+		console.log('init complete!!');
+
+		this.MEM.ready = true;
 		let isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
 		this.API.updateSigninStatus(isSignedIn);
 		gapi.auth2.getAuthInstance().isSignedIn.listen(this.API.updateSigninStatus);
@@ -97,7 +108,12 @@ const Session = (function() {
 			this.DOM.btn.authorize.style.display = 'none';
 			this.DOM.btn.signout.style.display = 'block';
 		} else {
-			this.MEM = {}
+			for(let key in this.MEM) {
+				if(key === 'ready') {
+					continue;
+				}
+				delete this.MEM[key];
+			}
 			this.DOM.btn.authorize.style.display = 'block';
 			this.DOM.btn.signout.style.display = 'none';
 		}
@@ -107,8 +123,7 @@ const Session = (function() {
 	async function api_initFolder() {
 
 		let query = {
-			q : `name = 'whitmir.io' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
-			pageSize : 10
+			q : `name = 'whitmir.io' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`
 		}
 		
 		let res;
@@ -124,7 +139,7 @@ const Session = (function() {
 		
 		let data = JSON.parse(res.body);
 		if(data.files.length !== 0) {
-			this.MEM.folder = data.files[0].id;
+			this.MEM.parent = data.files[0].id;
 		} else {
 			// Otherwise we have to make a new folder
 			query = {
@@ -143,10 +158,72 @@ const Session = (function() {
 				throw err;
 			}
 		
-			this.MEM.folder = JSON.parse(file.body).id;
+			this.MEM.parent = JSON.parse(file.body).id;
 		}
 		
-		console.log(this.MEM.folder);
+		this.API.initConfig();
+
+	}
+
+	async function api_initConfig() {
+
+		let query = {
+			q : `name = 'config.json' and parents in '${this.MEM.parent}' and trashed = false`
+		}
+		
+		console.log(query);
+		let res;
+		try {
+			res = await gapi.client.drive.files.list(query);
+		} catch(err) {
+			throw err;
+		}
+		
+		if(res.status !== 200) {
+			throw res.body;
+		}
+		
+		let data = JSON.parse(res.body);
+		console.log(data);
+		
+		// If no config file is found, then we create one
+		if(data.files.length === 0) {
+			
+			this.MEM.config = {
+				categories : {},
+				createdOn : Date.now()
+			}
+			
+			let fileMetadata = {
+				name : 'config.json',
+				parents : [this.MEM.parent]
+			}
+
+			let media = {
+				mimeType : 'application/vnd.google-apps.file',
+				body : JSON.stringify(this.MEM.config)
+			}
+			
+			const form = new FormData();
+			form.append('metadata', new Blob([JSON.stringify(fileMetadata)], {type: 'application/json'}));
+			form.append('file', new Blob([JSON.stringify(this.MEM.config)], {type: 'application/json'}));
+			
+			const url = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id';
+
+			const opts = {
+				method: 'POST',
+				headers: new Headers({'Authorization': 'Bearer ' + gapi.auth.getToken().access_token}),
+				body: form
+			}
+			try {
+				res = await fetch(url, opts);
+			} catch(err) {
+				throw err;
+			}
+
+			console.log(res.json());
+
+		}
 
 	}
 
