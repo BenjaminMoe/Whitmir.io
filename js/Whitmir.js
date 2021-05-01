@@ -41,6 +41,10 @@ const Whitmir = (function() {
 			list : document.getElementById('Whitmir.category.list'),
 			add : document.getElementById('Whitmir.category.add'),
 			input : document.getElementById('Whitmir.category.input')
+		},
+		books : {
+			create : document.getElementById('Whitmir.books.create'),
+			list : document.getElementById('Whitmir.books.list')
 		}
 	}
 	
@@ -50,7 +54,8 @@ const Whitmir = (function() {
 		handleProfileToggleClick : evt_handleProfileToggleClick.bind(this),
 		handleExportToggleClick : evt_handleExportToggleClick.bind(this),
 		handleCategoryToggleClick : evt_handleCategoryToggleClick.bind(this),
-		handleCategoryAddClick : evt_handleCategoryAddClick.bind(this)
+		handleCategoryAddClick : evt_handleCategoryAddClick.bind(this),
+		handleCreateBook : evt_handleCreateBook.bind(this)
 	}
 
 	this.API = {
@@ -60,7 +65,8 @@ const Whitmir = (function() {
 		initFolder : api_initFolder.bind(this),
 		initConfig : api_initConfig.bind(this),
 		updateConfig : api_updateConfig.bind(this),
-		renderCategories : api_renderCategories.bind(this)
+		renderCategories : api_renderCategories.bind(this),
+		renderBooks : api_renderBooks.bind(this)
 	}
 
 	init.apply(this);
@@ -76,6 +82,134 @@ const Whitmir = (function() {
 		this.DOM.export.toggle.addEventListener('click', this.EVT.handleExportToggleClick);
 		this.DOM.category.toggle.addEventListener('click', this.EVT.handleCategoryToggleClick);
 		this.DOM.category.add.addEventListener('click', this.EVT.handleCategoryAddClick);
+		this.DOM.books.create.addEventListener('click', this.EVT.handleCreateBook);
+
+	}
+
+	function api_renderBooks() {
+
+		console.log('render da books!!');
+		
+		this.DOM.books.list.innerHTML = '';
+			
+		if(this.MEM.config.unsorted.length) {
+			let h4 = document.createElement('h4');
+			this.DOM.books.list.appendChild(h4);
+		}
+		
+		this.MEM.config.unsorted.forEach( book => {
+			let li = document.createElement('li');
+			let node = document.createTextNode(book.name);
+			let icon = document.createElement('i');
+			icon.setAttribute('class', book.icon);
+			li.appendChild(icon);
+			li.appendChild(node);
+			this.DOM.books.list.appendChild(li);
+
+		});
+		
+		for(let key in this.MEM.config.categories) {
+			
+			let h4 = document.createElement('h4');
+			h4.textContent = key;
+			this.DOM.books.list.appendChild(h4);
+
+			this.MEM.config.categories[key].forEach( book => {
+				let li = document.createElement('li');
+				let node = document.createTextNode(book.name);
+				let icon = document.createElement('i');
+				icon.setAttribute('class', book.icon);
+				li.appendChild(icon);
+				li.appendChild(node);
+				this.DOM.books.list.appendChild(li);
+			});
+
+		}
+
+	}
+
+	async function evt_handleCreateBook() {
+
+		let name = prompt('Please give your book a title');
+		name = name.trim();
+		
+		// Do some basic sanity checks
+
+		if(!name) {
+			return;
+		}
+
+		if(!name.length) {
+			return alert('No title was entered');
+		}
+
+		let stripped = name.replace(/\s+/g, '');
+		if(!stripped.length) {
+			return alert('Book title cannot be only white space');
+		}
+		
+		// Check if the name exists
+
+		let found = false;
+		let lower = name.toLowerCase();
+
+		for(let i = 0; i < this.MEM.config.unsorted.length; i++) {
+			if(this.MEM.config.unsorted[i].name.toLowerCase() !== name) {
+				continue;
+			}
+			found = true;
+			break;
+		}
+
+		for(let key in this.MEM.config.categories) {
+			if(found) {
+				break;
+			}
+			for(let i = 0; i < this.MEM.config.categories[key].length; i++) {
+				if(this.MEM.config.categories[key][i].name.toLowerCase() !== name) {
+					continue;
+				}
+				found = true;
+				break;
+			}
+		}
+
+		if(found) {
+			return alert('Book title is already in use.');
+		}
+
+		// If name doesn't exist create a folder
+
+		let fileMetadata = {
+			name : name,
+			mimeType : 'application/vnd.google-apps.folder',
+			parents : [ this.MEM.parent ]
+		}
+		
+		let query = {
+			resource : fileMetadata,
+			fields : 'id'
+		}
+
+		let res;
+		try {
+			res = await gapi.client.drive.files.create(query);
+		} catch(err) {
+			throw err;
+		}
+		
+		let data = JSON.parse(res.body);
+		let book = {
+			name : name,
+			folder : data.id,
+			chapters : [],
+			createdOn : Date.now(),
+			icon : 'fas fa-book'
+		}
+
+		this.MEM.config.unsorted.push(book);
+		this.API.updateConfig();
+		this.API.renderBooks();
 
 	}
 
@@ -349,6 +483,7 @@ const Whitmir = (function() {
 		}
 		
 		this.API.renderCategories();
+		this.API.renderBooks();
 
 	}
 
