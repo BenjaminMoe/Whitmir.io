@@ -34,6 +34,13 @@ const Whitmir = (function() {
 			trigger : document.getElementById('Whitmir.export.trigger'),
 			toggle : document.getElementById('Whitmir.export.toggle'),
 			menu : document.getElementById('Whitmir.export.menu'),
+		},
+		category : {
+			toggle : document.getElementById('Whitmir.category.toggle'),
+			menu : document.getElementById('Whitmir.category.menu'),
+			list : document.getElementById('Whitmir.category.list'),
+			add : document.getElementById('Whitmir.category.add'),
+			input : document.getElementById('Whitmir.category.input')
 		}
 	}
 	
@@ -41,7 +48,9 @@ const Whitmir = (function() {
 		handleSigninClick : evt_handleSigninClick.bind(this),
 		handleSignoutClick : evt_handleSignoutClick.bind(this),
 		handleProfileToggleClick : evt_handleProfileToggleClick.bind(this),
-		handleExportToggleClick : evt_handleExportToggleClick.bind(this)
+		handleExportToggleClick : evt_handleExportToggleClick.bind(this),
+		handleCategoryToggleClick : evt_handleCategoryToggleClick.bind(this),
+		handleCategoryAddClick : evt_handleCategoryAddClick.bind(this)
 	}
 
 	this.API = {
@@ -50,7 +59,8 @@ const Whitmir = (function() {
 		updateSigninStatus : api_updateSigninStatus.bind(this),
 		initFolder : api_initFolder.bind(this),
 		initConfig : api_initConfig.bind(this),
-		updateConfig : api_updateConfig.bind(this)
+		updateConfig : api_updateConfig.bind(this),
+		renderCategories : api_renderCategories.bind(this)
 	}
 
 	init.apply(this);
@@ -64,6 +74,56 @@ const Whitmir = (function() {
 		this.DOM.session.signout.addEventListener('click', this.EVT.handleSignoutClick);
 		this.DOM.profile.toggle.addEventListener('click', this.EVT.handleProfileToggleClick);
 		this.DOM.export.toggle.addEventListener('click', this.EVT.handleExportToggleClick);
+		this.DOM.category.toggle.addEventListener('click', this.EVT.handleCategoryToggleClick);
+		this.DOM.category.add.addEventListener('click', this.EVT.handleCategoryAddClick);
+
+	}
+
+	function api_renderCategories() {
+
+		this.DOM.category.list.innerHTML = '';
+		for(let key in this.MEM.config.categories) {
+			let li = document.createElement('li');
+			let node = document.createTextNode(key);
+			let btn = document.createElement('div');
+			btn.setAttribute('class', 'btn');
+			let i = document.createElement('i');
+			i.setAttribute('class', 'fas fa-times');
+
+			li.appendChild(node);
+			li.appendChild(btn);
+			btn.appendChild(i);
+			this.DOM.category.list.appendChild(li);
+
+		}
+
+	}
+
+	function evt_handleCategoryAddClick(){
+		
+		let str = this.DOM.category.input.value;
+		if(!str.length) {
+			return alert('Please give the category a name');
+		}
+
+		let stripped = str.replace(/\s+/g, '');
+		if(!stripped.length) {
+			return alert('Please category name cannot be only white space');
+		}
+
+		if(str in this.MEM.config.categories) {
+			return alert('Category name already exists');
+		}
+
+		this.MEM.config.categories[str] = [];
+		this.API.updateConfig();
+		this.API.renderCategories();
+		this.DOM.category.input.value = '';
+	}
+
+	function evt_handleCategoryToggleClick() {
+
+		this.DOM.category.menu.classList.toggle('open');
 
 	}
 
@@ -230,6 +290,7 @@ const Whitmir = (function() {
 		if(data.files.length === 0) {
 		
 			this.MEM.config = {
+				unsorted : [],
 				categories : {},
 				createdOn : Date.now()
 			}
@@ -244,9 +305,12 @@ const Whitmir = (function() {
 				body : JSON.stringify(this.MEM.config)
 			}
 			
+			let config_str = JSON.stringify(this.MEM.config, null, 2);
+			const mime = {type: 'application/json'};
 			const form = new FormData();
-			form.append('metadata', new Blob([JSON.stringify(fileMetadata)], {type: 'application/json'}));
-			form.append('file', new Blob([JSON.stringify(this.MEM.config)], {type: 'application/json'}));
+
+			form.append('metadata', new Blob([JSON.stringify(fileMetadata)], mime));
+			form.append('file', new Blob([config_str], mime));
 			
 			const url = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id';
 
@@ -283,6 +347,8 @@ const Whitmir = (function() {
 			}
 
 		}
+		
+		this.API.renderCategories();
 
 	}
 
@@ -290,6 +356,8 @@ const Whitmir = (function() {
 	async function api_updateConfig() {
 	
 		const url = `https://www.googleapis.com/upload/drive/v3/files/${this.MEM.config.id}?uploadType=media&`;
+
+		this.MEM.config.updatedOn = Date.now();
 
 		const opts = {
 			method: 'PATCH',
