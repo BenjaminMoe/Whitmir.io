@@ -45,6 +45,10 @@ const Whitmir = (function() {
 		books : {
 			create : document.getElementById('Whitmir.books.create'),
 			list : document.getElementById('Whitmir.books.list')
+		},
+		chapter : {
+			create : document.getElementById('Whitmir.chapter.create'),
+			list : document.getElementById('Whitmir.chapter.list')
 		}
 	}
 	
@@ -55,7 +59,9 @@ const Whitmir = (function() {
 		handleExportToggleClick : evt_handleExportToggleClick.bind(this),
 		handleCategoryToggleClick : evt_handleCategoryToggleClick.bind(this),
 		handleCategoryAddClick : evt_handleCategoryAddClick.bind(this),
-		handleCreateBook : evt_handleCreateBook.bind(this)
+		handleCreateBook : evt_handleCreateBook.bind(this),
+		handleBookClick : evt_handleBookClick.bind(this),
+		handleCreateChapter : evt_handleCreateChapter.bind(this)
 	}
 
 	this.API = {
@@ -66,7 +72,8 @@ const Whitmir = (function() {
 		initConfig : api_initConfig.bind(this),
 		updateConfig : api_updateConfig.bind(this),
 		renderCategories : api_renderCategories.bind(this),
-		renderBooks : api_renderBooks.bind(this)
+		renderBooks : api_renderBooks.bind(this),
+		renderChapter : api_renderChapter.bind(this)
 	}
 
 	init.apply(this);
@@ -83,6 +90,111 @@ const Whitmir = (function() {
 		this.DOM.category.toggle.addEventListener('click', this.EVT.handleCategoryToggleClick);
 		this.DOM.category.add.addEventListener('click', this.EVT.handleCategoryAddClick);
 		this.DOM.books.create.addEventListener('click', this.EVT.handleCreateBook);
+		this.DOM.chapter.create.addEventListener('click', this.EVT.handleCreateChapter);
+
+	}
+
+	async function evt_handleCreateChapter() {
+
+		console.log('create chapter!!!');
+			
+		if(!this.MEM.book) {
+			return;
+		}
+
+		// Right now, be lazy and just get a name
+	
+		let name = prompt('Give your chapter a name!');
+		if(!name) {
+			return;
+		}
+
+		// Then we go ahead and create an html file
+		
+		let chapter = {
+			name : name,
+			createdOn : Date.now()
+		}
+			
+		let fileMetadata = {
+			name : name + '.html',
+			parents : [this.MEM.book.folder]
+		}
+
+		let media = {
+			mimeType : 'application/vnd.google-apps.file',
+			body : JSON.stringify(this.MEM.config)
+		}
+			
+		const mime = {type: 'application/json'};
+		const html = {type: 'text/html'};
+		const form = new FormData();
+
+		form.append('metadata', new Blob([JSON.stringify(fileMetadata)], mime));
+		form.append('file', new Blob([''], html));
+			
+		const url = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id';
+
+		const opts = {
+			method: 'POST',
+			headers: new Headers({'Authorization': 'Bearer ' + gapi.auth.getToken().access_token}),
+			body: form
+		}
+
+		let res;
+		try {
+			res = await fetch(url, opts);
+		} catch(err) {
+			throw err;
+		}
+		
+		res = await res.json();
+		chapter.id = res.id;
+
+		this.MEM.book.chapters.push(chapter);
+		this.API.renderChapter();
+		this.API.updateConfig();
+
+
+	}
+
+	function api_renderChapter() {
+
+		console.log('render chapters!!!');
+
+		this.DOM.chapter.list.innerHTML = '';
+
+		this.MEM.book.chapters.forEach( chapter => {
+			
+			let li = document.createElement('li');
+			li.textContent = chapter.name;
+			this.DOM.chapter.list.appendChild(li);
+
+		});
+
+	}
+
+	function evt_handleBookClick(evt) {
+
+		let elem = evt.target;
+		while(elem.parentNode && elem.tagName !== 'LI') {
+			elem = elem.parentNode;
+		}
+
+		let userData = elem.userData;
+		if(!userData) {
+			return;
+		}
+
+		if(this.MEM.activeBook) {
+			this.MEM.activeBook.classList.remove('active');
+		}
+		
+		this.MEM.activeBook = elem;
+		this.MEM.activeBook.classList.add('active');
+		this.MEM.book = userData;
+		
+		this.API.renderChapter();
 
 	}
 
@@ -105,7 +217,8 @@ const Whitmir = (function() {
 			li.appendChild(icon);
 			li.appendChild(node);
 			this.DOM.books.list.appendChild(li);
-
+			li.userData = book;
+			li.addEventListener('click', this.EVT.handleBookClick);
 		});
 		
 		for(let key in this.MEM.config.categories) {
@@ -122,6 +235,8 @@ const Whitmir = (function() {
 				li.appendChild(icon);
 				li.appendChild(node);
 				this.DOM.books.list.appendChild(li);
+				li.userData = book;
+				li.addEventListener('click', this.EVT.handleBookClick);
 			});
 
 		}
