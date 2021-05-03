@@ -114,12 +114,44 @@ const Whitmir = (function() {
 
 	}
 
-	function api_implementSave() {
+	async function api_implementSave() {
 		
-		console.log('implement the save!!!');
+		console.log('implement the save!!! 123');
 		
 		let contents = this.MEM.quill.getContents();
-		console.log(contents);
+		
+		let body = JSON.stringify(contents);
+		console.log(this.MEM.chapter);
+
+		
+		let id = this.MEM.chapter.id;
+		const metaData = {
+			fileId : id
+		}
+
+		const form = new FormData();
+		
+		const mime = {type: 'application/json'};
+		form.append('metadata', new Blob([JSON.stringify(metaData)], mime));
+		form.append('file', new Blob([JSON.stringify(contents, null, 2)], mime));
+		
+		const url = `https://www.googleapis.com/upload/drive/v3/files/${id}?uploadType=multipart`;
+
+		const opts = {
+			method: 'PATCH',
+			headers: new Headers({'Authorization': 'Bearer ' + gapi.auth.getToken().access_token}),
+			body : form
+		}
+
+		let res;
+
+		try {
+			res = await fetch(url, opts);
+		} catch(err) {
+			throw err;
+		}
+
+		res = await res.json();
 
 	}
 
@@ -203,7 +235,7 @@ const Whitmir = (function() {
 		}
 			
 		let fileMetadata = {
-			name : name + '.html',
+			name : name,
 			parents : [this.MEM.book.folder]
 		}
 
@@ -213,11 +245,10 @@ const Whitmir = (function() {
 		}
 			
 		const mime = {type: 'application/json'};
-		const html = {type: 'text/html'};
 		const form = new FormData();
 
 		form.append('metadata', new Blob([JSON.stringify(fileMetadata)], mime));
-		form.append('file', new Blob([''], html));
+		form.append('file', new Blob(['[]'], mim));
 			
 		const url = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id';
 
