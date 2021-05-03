@@ -52,7 +52,10 @@ const Whitmir = (function() {
 		},
 		editor : {
 			quill : document.getElementById('Whitmir.editor.quill'),
-			save : document.getElementById('Whitmir.editor.save')
+			save : document.getElementById('Whitmir.editor.save'),
+			undo : document.getElementById('Whitmir.editor.undo'),
+			redo : document.getElementById('Whitmir.editor.redo'),
+			bold : document.getElementById('Whitmir.editor.bold')
 		}
 	}
 	
@@ -70,7 +73,10 @@ const Whitmir = (function() {
 
 		// Toolbar Events
 
-		handleSaveClick : evt_handleSaveClick.bind(this)
+		handleSaveClick : evt_handleSaveClick.bind(this),
+		handleUndoClick : evt_handleUndoClick.bind(this),
+		handleRedoClick : evt_handleRedoClick.bind(this),
+		handleBoldClick : evt_handleBoldClick.bind(this)
 
 	}
 
@@ -95,7 +101,11 @@ const Whitmir = (function() {
 	function init() {
 	
 		this.API.loadClient();
+
+		// Reset Toolbar
+
 		this.MEM.quill = new Quill(this.DOM.editor.quill);
+		this.MEM.bold = false;
 
 		// Book and Chapter events
 
@@ -111,6 +121,9 @@ const Whitmir = (function() {
 		// Toolbar Events
 
 		this.DOM.editor.save.addEventListener('click', this.EVT.handleSaveClick);
+		this.DOM.editor.undo.addEventListener('click', this.EVT.handleUndoClick);
+		this.DOM.editor.redo.addEventListener('click', this.EVT.handleRedoClick);
+		this.DOM.editor.bold.addEventListener('click', this.EVT.handleBoldClick);
 
 	}
 
@@ -152,6 +165,31 @@ const Whitmir = (function() {
 		}
 
 		res = await res.json();
+
+	}
+	
+	function evt_handleBoldClick() {
+		
+		this.MEM.bold = !this.MEM.bold;
+		this.MEM.quill.format('bold', this.MEM.bold);
+
+		if(this.MEM.bold) {
+			this.DOM.editor.bold.classList.add('active');
+		} else {
+			this.DOM.editor.bold.classList.remove('active');
+		}
+
+	}
+	
+	function evt_handleRedoClick() {
+		
+		this.MEM.quill.history.redo();
+
+	}
+	
+	function evt_handleUndoClick() {
+		
+		this.MEM.quill.history.undo();
 
 	}
 
@@ -579,7 +617,10 @@ const Whitmir = (function() {
 			
 			for(let key in this.MEM) {
 				switch(key) {
-					case 'quill':
+				case 'quill':
+					break;
+				case 'bold':
+					this.MEM[key] = false;
 					break;
 				default:
 					delete this.MEM[key];

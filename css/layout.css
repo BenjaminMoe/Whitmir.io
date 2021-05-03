@@ -808,7 +808,6 @@ article div.toolbar table td.btn {
 
 article div.toolbar table td.btn button {
 
-	display: block;
 	margin: auto;
 	width: 96%;
 	display: block;
@@ -817,6 +816,13 @@ article div.toolbar table td.btn button {
 	background-color: transparent;
 	padding: 10px 0;
 	font-size: 16px;
+
+}
+
+article div.toolbar table td.btn button.active{
+
+	background-color: rgba(0,0,0, 0.1);
+	color: #06c;
 
 }
 
