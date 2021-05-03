@@ -49,6 +49,10 @@ const Whitmir = (function() {
 		chapter : {
 			create : document.getElementById('Whitmir.chapter.create'),
 			list : document.getElementById('Whitmir.chapter.list')
+		},
+		editor : {
+			quill : document.getElementById('Whitmir.editor.quill'),
+			save : document.getElementById('Whitmir.editor.save')
 		}
 	}
 	
@@ -61,7 +65,13 @@ const Whitmir = (function() {
 		handleCategoryAddClick : evt_handleCategoryAddClick.bind(this),
 		handleCreateBook : evt_handleCreateBook.bind(this),
 		handleBookClick : evt_handleBookClick.bind(this),
-		handleCreateChapter : evt_handleCreateChapter.bind(this)
+		handleCreateChapter : evt_handleCreateChapter.bind(this),
+		handleChapterClick : evt_handleChapterClick.bind(this),
+
+		// Toolbar Events
+
+		handleSaveClick : evt_handleSaveClick.bind(this)
+
 	}
 
 	this.API = {
@@ -73,7 +83,10 @@ const Whitmir = (function() {
 		updateConfig : api_updateConfig.bind(this),
 		renderCategories : api_renderCategories.bind(this),
 		renderBooks : api_renderBooks.bind(this),
-		renderChapter : api_renderChapter.bind(this)
+		renderChapter : api_renderChapter.bind(this),
+		openChapter : api_openChapter.bind(this),
+		updateChapter : api_updateChapter.bind(this),
+		implementSave : api_implementSave.bind(this)
 	}
 
 	init.apply(this);
@@ -82,6 +95,9 @@ const Whitmir = (function() {
 	function init() {
 	
 		this.API.loadClient();
+		this.MEM.quill = new Quill(this.DOM.editor.quill);
+
+		// Book and Chapter events
 
 		this.DOM.session.signin.addEventListener('click', this.EVT.handleSigninClick);
 		this.DOM.session.signout.addEventListener('click', this.EVT.handleSignoutClick);
@@ -92,6 +108,76 @@ const Whitmir = (function() {
 		this.DOM.books.create.addEventListener('click', this.EVT.handleCreateBook);
 		this.DOM.chapter.create.addEventListener('click', this.EVT.handleCreateChapter);
 
+		// Toolbar Events
+
+		this.DOM.editor.save.addEventListener('click', this.EVT.handleSaveClick);
+
+	}
+
+	function api_implementSave() {
+		
+		console.log('implement the save!!!');
+		
+		let contents = this.MEM.quill.getContents();
+		console.log(contents);
+
+	}
+
+	function evt_handleSaveClick() {
+
+		console.log('handle save click');
+		
+		this.API.implementSave();
+
+	}
+
+	async function evt_handleChapterClick(evt) {
+
+		let elem = evt.target;
+		while(elem.parentNode && elem.tagName !== 'LI') {
+			elem = elem.parentNode;
+		}
+
+		let userData = elem.userData;
+		if(!userData) {
+			return;
+		}
+
+		if(this.MEM.activeChapter) {
+			this.MEM.activeChapter.classList.remove('active');
+		}
+		
+		this.MEM.activeChapter = elem;
+		this.MEM.activeChapter.classList.add('active');
+		this.MEM.chapter = userData;
+
+		let query = {
+			fileId : this.MEM.chapter.id,
+			alt : 'media'
+		};
+
+		let res;
+		try {
+			res = await gapi.client.drive.files.get(query);
+		} catch(err) {
+			throw err;
+		}
+		
+		let contents = JSON.parse(res.body);
+		this.MEM.quill.setContents(contents);
+
+	}
+
+	function api_openChapter() {
+
+		console.log('open the chapter');
+
+	}
+
+	function api_updateChapter() {
+	
+		console.log('now we update the chapter');
+	
 	}
 
 	async function evt_handleCreateChapter() {
@@ -150,6 +236,7 @@ const Whitmir = (function() {
 		
 		res = await res.json();
 		chapter.id = res.id;
+		this.API.openChapter(chapter);
 
 		this.MEM.book.chapters.push(chapter);
 		this.API.renderChapter();
@@ -169,6 +256,8 @@ const Whitmir = (function() {
 			let li = document.createElement('li');
 			li.textContent = chapter.name;
 			this.DOM.chapter.list.appendChild(li);
+			li.userData = chapter;
+			li.addEventListener('click', this.EVT.handleChapterClick);
 
 		});
 
@@ -457,7 +546,15 @@ const Whitmir = (function() {
 		
 		} else {
 			
-			this.MEM = {}
+			for(let key in this.MEM) {
+				switch(key) {
+					case 'quill':
+					break;
+				default:
+					delete this.MEM[key];
+					break;
+				}
+			}
 
 			this.DOM.session.signin.classList.remove('hide');
 			this.DOM.profile.toggle.classList.add('hide');
