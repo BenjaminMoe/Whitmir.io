@@ -819,7 +819,7 @@ article div.toolbar table td.btn button {
 
 }
 
-article div.toolbar table td.btn button.active{
+article div.toolbar table td.btn button.ql-active {
 
 	background-color: rgba(0,0,0, 0.1);
 	color: #06c;

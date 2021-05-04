@@ -110,7 +110,11 @@ const Whitmir = (function() {
 
 		// Reset Toolbar
 
-		this.MEM.quill = new Quill(this.DOM.editor.quill);
+		this.MEM.quill = new Quill(this.DOM.editor.quill, {
+			modules : {
+				toolbar: '#toolbar'
+			}
+		});
 		this.MEM.bold = false;
 		this.MEM.underline = false;
 		this.MEM.strikethrough = false;
@@ -133,11 +137,6 @@ const Whitmir = (function() {
 		this.DOM.editor.undo.addEventListener('click', this.EVT.handleUndoClick);
 		this.DOM.editor.redo.addEventListener('click', this.EVT.handleRedoClick);
 		
-		this.DOM.editor.bold.addEventListener('click', this.EVT.handleBoldClick);
-		this.DOM.editor.italic.addEventListener('click', this.EVT.handleItalicClick);
-		this.DOM.editor.underline.addEventListener('click', this.EVT.handleUnderlineClick);
-		this.DOM.editor.strikethrough.addEventListener('click', this.EVT.handleStriketroughClick);
-
 	}
 
 	async function api_implementSave() {

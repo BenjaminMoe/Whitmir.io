@@ -26,17 +26,14 @@
 		<meta name="google-signin-client_id" content="453824233916-gsihim23buhhslutm73b0p8iopqto428.apps.googleusercontent.com">
 		<script src="https://apis.google.com/js/platform.js" async defer></script>
 
-		<!-- Google Analytics -->
-
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-PXHCPJ129W"></script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
-
-	  gtag('config', 'G-PXHCPJ129W');
-	</script>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-PXHCPJ129W"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-PXHCPJ129W');
+		</script>
 
 	</head>
 
@@ -297,27 +294,27 @@
 									<div class='line'></div>
 								</td>
 								<td class='btn'>
-									 <button title='Bold' id='Whitmir.editor.bold'>
+									 <button class='ql-bold' title='Bold'>
 									 	<i class="fas fa-bold"></i>
 									</button>
 								</td>
 								<td class='btn'>
-									<button title='Italic' id='Whitmir.editor.italic'>
+									<button class='ql-italic' title='Italic'>
 										<i class="fas fa-italic"></i>
 									</button>
 								</td>
 								<td class='btn'>
-									<button title='Underline' id='Whitmir.editor.underline'>
+									<button class='ql-underline' title='Underline'>
 										<i class="fas fa-underline"></i>
 									</button>
 								</td>
 								<td class='btn'>
-									<button title='Strikethrough' id='Whitmir.editor.strikethrough'>
+									<button class='ql-strike' title='Strikethrough'>
 										<i class="fas fa-strikethrough"></i>
 									</button>
 								</td>
 								<td class='btn'>
-									<button title='Inline Code' id='Whitmir.editor.inline_code'>
+									<button class='ql-code' title='Inline Code'>
 										<i class="fas fa-code-branch"></i>
 									</button>
 								</td>
@@ -325,22 +322,22 @@
 									<div class='line'></div>
 								</td>
 								<td class='btn'>
-									<button title='Link (Selected Text)'>
+									<button class='ql-link' title='Link (Selected Text)'>
 										<i class="fas fa-link"></i>
 									</button>
 								</td>
 								<td class='btn'>
-									<button title='Block Quote'>
+									<button class='ql-blockquote' title='Block Quote'>
 										<i class="fas fa-quote-right"></i>
 									</button>
 								</td>
 								<td class='btn'>
-									<button title='Image' class='img'>
+									<button class='ql-image' title='Image' class='img'>
 										<i class="far fa-image-polaroid"></i>
 									</button>
 								</td>
 								<td class='btn'>
-									<button title='Code Block'>
+									<button class='ql-code-block' title='Code Block'>
 										<i class="fas fa-code"></i>
 									</button>
 								</td>
@@ -348,22 +345,22 @@
 									<div class='line'></div>
 								</td>
 								<td class='btn'>
-									<button>
+									<button class="ql-list" value="bullet">
 										<i title='Bullet List' class="fas fa-list"></i>
 									</button>
 								</td>
 								<td class='btn'>
-									<button>
+									<button class="ql-list" value="ordered">
 										<i title='Numbered List' class="fas fa-list-ol"></i>
 									</button>
 								</td>
 								<td class='btn'>
-									<button>
+									<button class="ql-script" value="sub">
 										<i title='Subscript' class="fas fa-subscript"></i>
 									</button>
 								</td>
 								<td class='btn'>
-									<button>
+									<button class="ql-script" value="super">
 										<i title='Superscript' class="fas fa-superscript"></i>
 									</button>
 								</td>
@@ -371,17 +368,17 @@
 									<div class='line'></div>
 								</td>
 								<td class='btn'>
-									<button title='Heading'>
+									<button title='H2'>
 										<i class="fas fa-h2"></i>
 									</button>
 								</td>
 								<td class='btn'>
-									<button title='Indent'>
+									<button title='H3'>
 										<i class="fas fa-h3"></i>
 									</button>
 								</td>
 								<td class='btn'>
-									<button title='Outdent'>
+									<button title='H4'>
 										<i class="fas fa-h4"></i>
 									</button>
 								</td>
@@ -389,7 +386,7 @@
 									<div class='line'></div>
 								</td>
 								<td class='btn'>
-									<button title='Remove Format'>
+									<button class='ql-clean' title='Remove Format'>
 										<i class="fas fa-remove-format"></i>
 									</button>
 								</td>
