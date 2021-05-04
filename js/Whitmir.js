@@ -55,7 +55,10 @@ const Whitmir = (function() {
 			save : document.getElementById('Whitmir.editor.save'),
 			undo : document.getElementById('Whitmir.editor.undo'),
 			redo : document.getElementById('Whitmir.editor.redo'),
-			bold : document.getElementById('Whitmir.editor.bold')
+			bold : document.getElementById('Whitmir.editor.bold'),
+			italic : document.getElementById('Whitmir.editor.italic'),
+			underline : document.getElementById('Whitmir.editor.underline'),
+			strikethrough : document.getElementById('Whitmir.editor.strikethrough'),
 		}
 	}
 	
@@ -76,7 +79,10 @@ const Whitmir = (function() {
 		handleSaveClick : evt_handleSaveClick.bind(this),
 		handleUndoClick : evt_handleUndoClick.bind(this),
 		handleRedoClick : evt_handleRedoClick.bind(this),
-		handleBoldClick : evt_handleBoldClick.bind(this)
+		handleBoldClick : evt_handleBoldClick.bind(this),
+		handleUnderlineClick : evt_handleUnderlineClick.bind(this),
+		handleItalicClick : evt_handleItalicClick.bind(this),
+		handleStriketroughClick : evt_handleStriketroughClick.bind(this)
 
 	}
 
@@ -106,6 +112,9 @@ const Whitmir = (function() {
 
 		this.MEM.quill = new Quill(this.DOM.editor.quill);
 		this.MEM.bold = false;
+		this.MEM.underline = false;
+		this.MEM.strikethrough = false;
+		this.MEM.italic = false;
 
 		// Book and Chapter events
 
@@ -123,7 +132,11 @@ const Whitmir = (function() {
 		this.DOM.editor.save.addEventListener('click', this.EVT.handleSaveClick);
 		this.DOM.editor.undo.addEventListener('click', this.EVT.handleUndoClick);
 		this.DOM.editor.redo.addEventListener('click', this.EVT.handleRedoClick);
+		
 		this.DOM.editor.bold.addEventListener('click', this.EVT.handleBoldClick);
+		this.DOM.editor.italic.addEventListener('click', this.EVT.handleItalicClick);
+		this.DOM.editor.underline.addEventListener('click', this.EVT.handleUnderlineClick);
+		this.DOM.editor.strikethrough.addEventListener('click', this.EVT.handleStriketroughClick);
 
 	}
 
@@ -165,6 +178,45 @@ const Whitmir = (function() {
 		}
 
 		res = await res.json();
+
+	}
+	
+	function evt_handleUnderlineClick() {
+		
+		this.MEM.underline = !this.MEM.underline;
+		this.MEM.quill.format('underline', this.MEM.underline);
+
+		if(this.MEM.underline) {
+			this.DOM.editor.underline.classList.add('active');
+		} else {
+			this.DOM.editor.underline.classList.remove('active');
+		}
+
+	}
+	
+	function evt_handleStriketroughClick() {
+		
+		this.MEM.strikethrough = !this.MEM.strikethrough;
+		this.MEM.quill.format('strike', this.MEM.strikethrough);
+
+		if(this.MEM.strikethrough) {
+			this.DOM.editor.strikethrough.classList.add('active');
+		} else {
+			this.DOM.editor.strikethrough.classList.remove('active');
+		}
+
+	}
+	
+	function evt_handleItalicClick() {
+		
+		this.MEM.italic = !this.MEM.italic;
+		this.MEM.quill.format('italic', this.MEM.italic);
+
+		if(this.MEM.italic) {
+			this.DOM.editor.italic.classList.add('active');
+		} else {
+			this.DOM.editor.italic.classList.remove('active');
+		}
 
 	}
 	
@@ -620,6 +672,9 @@ const Whitmir = (function() {
 				case 'quill':
 					break;
 				case 'bold':
+				case 'italic':
+				case 'underline':
+				case 'strikethrough':
 					this.MEM[key] = false;
 					break;
 				default:
