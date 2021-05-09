@@ -250,6 +250,8 @@
 						<div class='padding'></div>
 
 						<div id='Whitmir.chapter.list'>
+							
+							<!--
 							<li class='active'>00. Forward</li>
 							<li>01. Introduction</li>
 							<li>02. Open a Window</li>
@@ -260,6 +262,8 @@
 							<li>07. Draw a Ball</li>
 							<li>08. Update Ball Position</li>
 							<li>09. Bounce the Ball</li>
+							-->
+
 						</div>
 					</div>
 
@@ -291,18 +295,22 @@
 								<td class='status'>
 
 									<div class='select'>
-										<span>Rich Text</span>
-										<i class="fas fa-angle-down"></i>
+										<div class='toggle' id='Whitmir.mode.toggle'>
+											<span>Rich Text</span>
+											<i class="fas fa-angle-down"></i>
+										</div>
 
-										<div class='options hide'>
-											<li>
+										<div class='options hide' id='Whitmir.mode.menu'>
+											<li id='Whitmir.mode.richtext'>
 												<i class="fas fa-text"></i> Rich Text
 											</li>
-											<li><i class="fas fa-check"></i> HTML</li>
-											<li>
+											<li id='Whitmir.mode.html'>
+												<i class="fas fa-check"></i> HTML
+											</li>
+											<li id='Whitmir.mode.json'>
 												<i class="fas fa-brackets-curly"></i> JSON
 											</li>
-											<li>
+											<li id='Whitmir.mode.markdown'>
 												<i class="fas fa-marker"></i> Markdown
 											</li>
 										</div>

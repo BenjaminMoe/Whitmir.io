@@ -58,6 +58,14 @@ const Whitmir = (function() {
 			save : document.getElementById('Whitmir.editor.save'),
 			undo : document.getElementById('Whitmir.editor.undo'),
 			redo : document.getElementById('Whitmir.editor.redo'),
+		},
+		mode : {
+			toggle : document.getElementById('Whitmir.mode.toggle'),
+			menu : document.getElementById('Whitmir.mode.menu'),
+			html : document.getElementById('Whitmir.mode.html'),
+			richtext : document.getElementById('Whitmir.mode.richtext'),
+			json : document.getElementById('Whitmir.mode.json'),
+			markdown : document.getElementById('Whitmir.mode.markdown')
 		}
 	}
 	
@@ -72,6 +80,8 @@ const Whitmir = (function() {
 		handleBookClick : evt_handleBookClick.bind(this),
 		handleCreateChapter : evt_handleCreateChapter.bind(this),
 		handleChapterClick : evt_handleChapterClick.bind(this),
+
+		handleModeToggleClick : evt_handleModeToggleClick.bind(this),
 
 		// Toolbar Events
 
@@ -121,7 +131,8 @@ const Whitmir = (function() {
 		this.DOM.session.signin.addEventListener('click', this.EVT.handleSigninClick);
 		this.DOM.session.signout.addEventListener('click', this.EVT.handleSignoutClick);
 		this.DOM.profile.toggle.addEventListener('click', this.EVT.handleProfileToggleClick);
-
+		
+		this.DOM.mode.toggle.addEventListener('click', this.EVT.handleModeToggleClick);
 		//this.DOM.export.toggle.addEventListener('click', this.EVT.handleExportToggleClick);
 		
 		this.DOM.category.toggle.addEventListener('click', this.EVT.handleCategoryToggleClick);
@@ -142,6 +153,12 @@ const Whitmir = (function() {
 		this.DOM.editor.quill.addEventListener('dragover', this.EVT.handleDragOver);
 		this.DOM.editor.quill.addEventListener('drop', this.EVT.handleDrop);
 	
+	}
+
+	function evt_handleModeToggleClick() {
+
+		this.DOM.mode.menu.classList.toggle('hide');
+
 	}
 
 	function evt_handleDragEnter(evt) {
