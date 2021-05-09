@@ -82,11 +82,15 @@
 
 				<div class='export hide' id='Whitmir.export.widget'>
 					
-					<a id='Whitmir.export.trigger'>Export to <span>Kindle</span></a>
-
+					<a id='Whitmir.export.trigger'>
+						<i class="fas fa-download"></i> Export to ePub
+					</a>
+					
+					<!--
 					<div class='dropdown' id='Whitmir.export.toggle'>
 						<i class="fas fa-chevron-down"></i>
 					</div>
+					-->
 
 				</div>
 
@@ -285,10 +289,47 @@
 									<div class='line'></div>
 								</td>
 								<td class='status'>
+
 									<div class='select'>
 										<span>Rich Text</span>
 										<i class="fas fa-angle-down"></i>
+
+										<div class='options hide'>
+											<li>
+												<i class="fas fa-text"></i> Rich Text
+											</li>
+											<li><i class="fas fa-check"></i> HTML</li>
+											<li>
+												<i class="fas fa-brackets-curly"></i> JSON
+											</li>
+											<li>
+												<i class="fas fa-marker"></i> Markdown
+											</li>
+										</div>
+
 									</div>
+
+									<!--
+									<select class="ql-header">
+										<option value='' selected>Normal</option>
+										<option value='1'>Heading 1</option>
+										<option value='2'>Heading 2</option>
+										<option value='3'>Heading 3</option>
+										<option value='4'>Heading 4</option>
+										<option value='5'>Heading 5</option>
+										<option value='6'>Heading 6</option>
+									</select>
+									-->
+									
+									<!--
+									<select>
+										<option>Rich Text</option>
+										<option>HTML</option>
+										<option>JSON</option>
+										<option>Markdown</option>
+									</select>
+									-->
+
 								</td>
 								<td class='split'>
 									<div class='line'></div>
@@ -315,7 +356,7 @@
 								</td>
 								<td class='btn'>
 									<button class='ql-code' title='Inline Code'>
-										<i class="fas fa-code-branch"></i>
+										<i class="fas fa-terminal"></i>
 									</button>
 								</td>
 								<td class='split'>
@@ -386,7 +427,7 @@
 									<div class='line'></div>
 								</td>
 								<td class='btn'>
-									<button title='Align Left' class="ql-align">
+									<button title='Align Left' class="ql-align" value='left'>
 										<i class="fas fa-align-left"></i>
 									</button>
 								</td>

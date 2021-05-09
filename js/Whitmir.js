@@ -7,8 +7,11 @@ const CREDENTIALS = {
 		'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'
 	],
 	scope : [
-		'https://www.googleapis.com/auth/drive.metadata.readonly',
-		'https://www.googleapis.com/auth/drive.file'
+		'https://www.googleapis.com/auth/drive',
+		'https://www.googleapis.com/auth/drive.file',
+		'https://www.googleapis.com/auth/drive.appdata',
+		'https://www.googleapis.com/auth/drive.scripts',
+		'https://www.googleapis.com/auth/drive.metadata'
 	].join(' ')
 };
 
@@ -55,10 +58,6 @@ const Whitmir = (function() {
 			save : document.getElementById('Whitmir.editor.save'),
 			undo : document.getElementById('Whitmir.editor.undo'),
 			redo : document.getElementById('Whitmir.editor.redo'),
-			bold : document.getElementById('Whitmir.editor.bold'),
-			italic : document.getElementById('Whitmir.editor.italic'),
-			underline : document.getElementById('Whitmir.editor.underline'),
-			strikethrough : document.getElementById('Whitmir.editor.strikethrough'),
 		}
 	}
 	
@@ -79,10 +78,11 @@ const Whitmir = (function() {
 		handleSaveClick : evt_handleSaveClick.bind(this),
 		handleUndoClick : evt_handleUndoClick.bind(this),
 		handleRedoClick : evt_handleRedoClick.bind(this),
-		handleBoldClick : evt_handleBoldClick.bind(this),
-		handleUnderlineClick : evt_handleUnderlineClick.bind(this),
-		handleItalicClick : evt_handleItalicClick.bind(this),
-		handleStriketroughClick : evt_handleStriketroughClick.bind(this)
+		
+		handleDragEnter : evt_handleDragEnter.bind(this),
+		handleDragLeave : evt_handleDragLeave.bind(this),
+		handleDragOver : evt_handleDragOver.bind(this),
+		handleDrop : evt_handleDrop.bind(this),
 
 	}
 
@@ -115,17 +115,15 @@ const Whitmir = (function() {
 				toolbar: '#toolbar'
 			}
 		});
-		this.MEM.bold = false;
-		this.MEM.underline = false;
-		this.MEM.strikethrough = false;
-		this.MEM.italic = false;
 
 		// Book and Chapter events
 
 		this.DOM.session.signin.addEventListener('click', this.EVT.handleSigninClick);
 		this.DOM.session.signout.addEventListener('click', this.EVT.handleSignoutClick);
 		this.DOM.profile.toggle.addEventListener('click', this.EVT.handleProfileToggleClick);
-		this.DOM.export.toggle.addEventListener('click', this.EVT.handleExportToggleClick);
+
+		//this.DOM.export.toggle.addEventListener('click', this.EVT.handleExportToggleClick);
+		
 		this.DOM.category.toggle.addEventListener('click', this.EVT.handleCategoryToggleClick);
 		this.DOM.category.add.addEventListener('click', this.EVT.handleCategoryAddClick);
 		this.DOM.books.create.addEventListener('click', this.EVT.handleCreateBook);
@@ -137,6 +135,37 @@ const Whitmir = (function() {
 		this.DOM.editor.undo.addEventListener('click', this.EVT.handleUndoClick);
 		this.DOM.editor.redo.addEventListener('click', this.EVT.handleRedoClick);
 		
+		// Drag and Drop Events
+	
+		this.DOM.editor.quill.addEventListener('dragenter', this.EVT.handleDragEnter);
+		this.DOM.editor.quill.addEventListener('dragleave', this.EVT.handleDragLeave);
+		this.DOM.editor.quill.addEventListener('dragover', this.EVT.handleDragOver);
+		this.DOM.editor.quill.addEventListener('drop', this.EVT.handleDrop);
+	
+	}
+
+	function evt_handleDragEnter(evt) {
+		
+		console.log('drag enter!!');
+
+	}
+
+	function evt_handleDragLeave(evt) {
+
+		console.log('drga leave!!');
+
+	}
+
+	function evt_handleDragOver(evt) {
+
+		console.log('drag over!!');
+
+	}
+
+	function evt_handleDrop(evt) {
+
+		console.log('drop!!!');
+
 	}
 
 	async function api_implementSave() {
@@ -177,58 +206,6 @@ const Whitmir = (function() {
 		}
 
 		res = await res.json();
-
-	}
-	
-	function evt_handleUnderlineClick() {
-		
-		this.MEM.underline = !this.MEM.underline;
-		this.MEM.quill.format('underline', this.MEM.underline);
-
-		if(this.MEM.underline) {
-			this.DOM.editor.underline.classList.add('active');
-		} else {
-			this.DOM.editor.underline.classList.remove('active');
-		}
-
-	}
-	
-	function evt_handleStriketroughClick() {
-		
-		this.MEM.strikethrough = !this.MEM.strikethrough;
-		this.MEM.quill.format('strike', this.MEM.strikethrough);
-
-		if(this.MEM.strikethrough) {
-			this.DOM.editor.strikethrough.classList.add('active');
-		} else {
-			this.DOM.editor.strikethrough.classList.remove('active');
-		}
-
-	}
-	
-	function evt_handleItalicClick() {
-		
-		this.MEM.italic = !this.MEM.italic;
-		this.MEM.quill.format('italic', this.MEM.italic);
-
-		if(this.MEM.italic) {
-			this.DOM.editor.italic.classList.add('active');
-		} else {
-			this.DOM.editor.italic.classList.remove('active');
-		}
-
-	}
-	
-	function evt_handleBoldClick() {
-		
-		this.MEM.bold = !this.MEM.bold;
-		this.MEM.quill.format('bold', this.MEM.bold);
-
-		if(this.MEM.bold) {
-			this.DOM.editor.bold.classList.add('active');
-		} else {
-			this.DOM.editor.bold.classList.remove('active');
-		}
 
 	}
 	

@@ -212,10 +212,9 @@ header div.profile-menu div.line {
 
 header div.export {
 
-	width: 200px;
+	width: 170px;
 	height: 36px;
 	line-height: 36px;
-	text-indent: 18px;
 	border: 1px solid #fff;
 	border-radius: 28px;
 	position: absolute;
@@ -223,6 +222,7 @@ header div.export {
 	right: 84px;
 	font-size: 15px;
 	color: #fff;
+	text-align: center;
 
 }
 
@@ -861,6 +861,14 @@ article div.toolbar table td.status {
 
 }
 
+article div.toolbar table td.status select {
+
+	display: block;
+	width: calc(100% - 8px);
+	margin: auto;
+
+}
+
 article div.toolbar table td.status div.select {
 
 	width: 96%;
@@ -873,6 +881,76 @@ article div.toolbar table td.status div.select {
 	display: block;
 	margin: auto;
 	position: relative;
+
+}
+
+article div.toolbar table td.status div.select:hover {
+
+	cursor: pointer;
+
+}
+
+article div.toolbar table td.status div.select:hover i.fa-angle-down {
+
+
+}
+
+article div.toolbar table td.status div.select div.options {
+
+	position: absolute;
+	left: 0;
+	top: calc(100% + 4px);
+	width: calc(100% - 2px);
+	background-color: #fff;
+	border-radius: 5px;
+	z-index: 10;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	transition: transform 250ms, opacity 250ms;
+
+}
+
+article div.toolbar table td.status div.select div.options.hide {
+
+	pointer-events: none;
+	opacity: 0;
+	transform: translateY(-10px);
+
+}
+
+article div.toolbar table td.status div.select div.options li {
+
+	list-style: none;
+	border-bottom: 1px solid #dadada;
+	padding: 4px 0;
+	padding-left: 10px;
+
+}
+
+article div.toolbar table td.status div.select div.options li:hover {
+
+	cursor: pointer;
+	background-color: #f2f2f2;
+
+}
+
+article div.toolbar table td.status div.select div.options li:hover i {
+
+	opacity: 0.9;
+
+}
+
+article div.toolbar table td.status div.select div.options li:last-child {
+
+	border-bottom: none;
+
+}
+
+article div.toolbar table td.status div.select div.options li i {
+
+	position: relative;
+	opacity: 0.4;
+	left: -4px;
+	top: 0;
 
 }
 
@@ -974,5 +1052,13 @@ div.ql-editor pre.ql-syntax {
 	border-radius: 8px;
 	margin: 8px 0;
 	padding: 10px;
+
+}
+
+div.ql-editor p img {
+
+	max-width: 100%;
+	display: block;
+	margin: auto;
 
 }
