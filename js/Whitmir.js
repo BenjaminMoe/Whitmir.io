@@ -119,12 +119,18 @@ const Whitmir = (function() {
 		this.API.loadClient();
 
 		// Reset Toolbar
-
+		
+		/*
 		this.MEM.quill = new Quill(this.DOM.editor.quill, {
 			modules : {
 				toolbar: '#toolbar'
 			}
 		});
+		*/
+
+		tinymce.init({
+      		selector: '#mytextarea'
+    	});
 
 		// Book and Chapter events
 
