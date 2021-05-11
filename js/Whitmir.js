@@ -129,7 +129,13 @@ const Whitmir = (function() {
 		*/
 
 		tinymce.init({
-      		selector: '#mytextarea'
+      		selector: '#mytextarea',
+			menubar: false,
+			toolbar : false,
+			statusbar : false,
+			plugins: 'spellchecker',
+			content_css : 'css/myLayout.css',
+			content_style: "body {padding: 0px; margin : 0px}"
     	});
 
 		// Book and Chapter events

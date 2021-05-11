@@ -981,7 +981,7 @@ article div.page-content h2 {
 
 article div.page-content div.meta {
 
-	padding: 20px 0;
+	padding-top: 20px;
 	font-size: 15px;
 	color: #546092;
 
@@ -1060,5 +1060,11 @@ div.ql-editor p img {
 	max-width: 100%;
 	display: block;
 	margin: auto;
+
+}
+
+.tox.tox-tinymce {
+
+	border: none;
 
 }
