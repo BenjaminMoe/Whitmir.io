@@ -128,12 +128,12 @@ const Whitmir = (function() {
 		});
 		*/
 
-		tinymce.init({
+		this.MEM.tiny = tinymce.init({
       		selector: '#mytextarea',
 			menubar: false,
-			toolbar : false,
+			// toolbar : false,
 			statusbar : false,
-			plugins: 'spellchecker',
+			plugins: 'spellchecker autoresize',
 			content_css : 'css/myLayout.css',
 			content_style: "body {padding: 0px; margin : 0px}"
     	});
@@ -199,13 +199,8 @@ const Whitmir = (function() {
 
 	async function api_implementSave() {
 		
-		console.log('implement the save!!! 123');
-		
-		let contents = this.MEM.quill.getContents();
-		
-		let body = JSON.stringify(contents);
+		let body = tinymce.activeEditor.getContent()
 		console.log(this.MEM.chapter);
-
 		
 		let id = this.MEM.chapter.id;
 		const metaData = {
@@ -216,7 +211,7 @@ const Whitmir = (function() {
 		
 		const mime = {type: 'application/json'};
 		form.append('metadata', new Blob([JSON.stringify(metaData)], mime));
-		form.append('file', new Blob([JSON.stringify(contents, null, 2)], mime));
+		form.append('file', new Blob([body], mime));
 		
 		const url = `https://www.googleapis.com/upload/drive/v3/files/${id}?uploadType=multipart`;
 
@@ -290,8 +285,8 @@ const Whitmir = (function() {
 			throw err;
 		}
 		
-		let contents = JSON.parse(res.body);
-		this.MEM.quill.setContents(contents);
+		//let contents = JSON.parse(res.body);
+		tinymce.activeEditor.setContent(res.body);
 
 	}
 
