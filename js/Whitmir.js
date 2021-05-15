@@ -131,9 +131,9 @@ const Whitmir = (function() {
 		this.MEM.tiny = tinymce.init({
       		selector: '#mytextarea',
 			menubar: false,
-			// toolbar : false,
+			toolbar : 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent code',
 			statusbar : false,
-			plugins: 'spellchecker autoresize',
+			plugins: 'spellchecker autoresize code',
 			content_css : 'css/myLayout.css',
 			content_style: "body {padding: 0px; margin : 0px}"
     	});
