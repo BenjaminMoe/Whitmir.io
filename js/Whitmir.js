@@ -45,6 +45,10 @@ const Whitmir = (function() {
 			add : document.getElementById('Whitmir.category.add'),
 			input : document.getElementById('Whitmir.category.input')
 		},
+		settings : {
+			toggle : document.getElementById('Whitmir.settings.toggle'),
+			menu : document.getElementById('Whitmir.settings.menu')
+		},
 		books : {
 			create : document.getElementById('Whitmir.books.create'),
 			list : document.getElementById('Whitmir.books.list')
@@ -73,6 +77,7 @@ const Whitmir = (function() {
 		handleSigninClick : evt_handleSigninClick.bind(this),
 		handleSignoutClick : evt_handleSignoutClick.bind(this),
 		handleProfileToggleClick : evt_handleProfileToggleClick.bind(this),
+		handleSettingsToggleClick : evt_handleSettingsToggleClick.bind(this),
 		handleExportToggleClick : evt_handleExportToggleClick.bind(this),
 		handleCategoryToggleClick : evt_handleCategoryToggleClick.bind(this),
 		handleCategoryAddClick : evt_handleCategoryAddClick.bind(this),
@@ -120,22 +125,18 @@ const Whitmir = (function() {
 
 		// Reset Toolbar
 		
-		/*
-		this.MEM.quill = new Quill(this.DOM.editor.quill, {
-			modules : {
-				toolbar: '#toolbar'
-			}
-		});
-		*/
-
 		this.MEM.tiny = tinymce.init({
       		selector: '#mytextarea',
 			menubar: false,
+			/*
 			toolbar : 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent code',
+			toolbar_sticky : true,
+			*/
+			toolbar : false,
 			statusbar : false,
 			plugins: 'spellchecker autoresize code',
 			content_css : 'css/myLayout.css',
-			content_style: "body {padding: 0px; margin : 0px}"
+			content_style: "body {padding: 0px; margin : 0px;} p { margin-bottom: 30px; }"
     	});
 
 		// Book and Chapter events
@@ -143,6 +144,7 @@ const Whitmir = (function() {
 		this.DOM.session.signin.addEventListener('click', this.EVT.handleSigninClick);
 		this.DOM.session.signout.addEventListener('click', this.EVT.handleSignoutClick);
 		this.DOM.profile.toggle.addEventListener('click', this.EVT.handleProfileToggleClick);
+		this.DOM.settings.toggle.addEventListener('click', this.EVT.handleSettingsToggleClick);
 		
 		this.DOM.mode.toggle.addEventListener('click', this.EVT.handleModeToggleClick);
 		//this.DOM.export.toggle.addEventListener('click', this.EVT.handleExportToggleClick);
@@ -165,6 +167,12 @@ const Whitmir = (function() {
 		this.DOM.editor.quill.addEventListener('dragover', this.EVT.handleDragOver);
 		this.DOM.editor.quill.addEventListener('drop', this.EVT.handleDrop);
 	
+	}
+
+	function evt_handleSettingsToggleClick() {
+
+		this.DOM.settings.menu.classList.toggle('hide');
+
 	}
 
 	function evt_handleModeToggleClick() {
