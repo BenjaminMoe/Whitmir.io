@@ -178,14 +178,14 @@
 						</button>
 					</div>
 
-					<div class='settings-menu' id='Whitmir.settings.menu'>
+					<div class='settings-menu hide' id='Whitmir.settings.menu'>
 						<h3>
 							<span>Brickout Settings</span>
 						</h3>
 						<ul>
 
-							<li class='label'>Page Breaks</li>
-							<li class='value'>
+							<li class='label'>Cover</li>
+							<li id='Whitmir.settings.cover' class='value'>
 								<select>
 									<option>No</option>
 									<option>yes</option>
@@ -193,32 +193,16 @@
 							</li>
 
 							<li class='label'>Table of Contents</li>
-							<li class='value'>
+							<li id='Whitmir.settings.toc' class='value'>
 								<select>
 									<option>No</option>
 									<option>yes</option>
 								</select>
 							</li>
 
-							<li class='label'>Editor</li>
-							<li class='value'>
-								<select>
-									<option>RichText</option>
-									<option>MarkDown</option>
-								</select>
-							</li>
-
-							<li class='label'>Page Size</li>
-							<li class='value'>
-								<select>
-									<option>Letter</option>
-									<option>Digest</option>
-								</select>
-							</li>
-
 							<li class='label'>Category</li>
 							<li class='value'>
-								<select>
+								<select id='Whitmir.settings.category'>
 									<option>(None)</option>
 									<option>gtk.dashgl.com</option>
 									<option>egl.dashgl.com</option>

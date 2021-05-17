@@ -47,7 +47,10 @@ const Whitmir = (function() {
 		},
 		settings : {
 			toggle : document.getElementById('Whitmir.settings.toggle'),
-			menu : document.getElementById('Whitmir.settings.menu')
+			menu : document.getElementById('Whitmir.settings.menu'),
+			cover : document.getElementById('Whitmir.settings.cover'),
+			toc : document.getElementById('Whitmir.settings.toc'),
+			category : document.getElementById('Whitmir.settings.category')
 		},
 		books : {
 			create : document.getElementById('Whitmir.books.create'),
@@ -119,13 +122,13 @@ const Whitmir = (function() {
 	init.apply(this);
 	return this;
 
-	function init() {
+	async function init() {
 	
 		this.API.loadClient();
 
 		// Reset Toolbar
 		
-		this.MEM.tiny = tinymce.init({
+		this.MEM.tiny = await tinymce.init({
       		selector: '#mytextarea',
 			menubar: false,
 			/*
@@ -166,12 +169,42 @@ const Whitmir = (function() {
 		this.DOM.editor.quill.addEventListener('dragleave', this.EVT.handleDragLeave);
 		this.DOM.editor.quill.addEventListener('dragover', this.EVT.handleDragOver);
 		this.DOM.editor.quill.addEventListener('drop', this.EVT.handleDrop);
-	
+		
 	}
 
 	function evt_handleSettingsToggleClick() {
 
+		console.log(this.MEM);
+		
+		if(!this.MEM.book) {
+			return;
+		}
+
+
+		if(this.DOM.settings.menu.classList.contains('hide')) {
+			
+			this.MEM.book.cover = this.MEM.book.cover || false;
+			this.MEM.book.table_of_contents = this.MEM.book.table_of_contents || false;
+
+			let select = this.DOM.settings.category;
+			select.innerHTML = '<option>Unsorted</option>';
+
+			for(let key in this.MEM.config.categories) {
+				let option = document.createElement('option');
+				option.textContent = key;
+				option.setAttribute('value', key);
+				select.appendChild(option);
+			}
+
+			if(this.MEM.book.category) {
+				select.value = this.MEM.book.category;
+			}
+			
+			console.log(select);
+		}
+
 		this.DOM.settings.menu.classList.toggle('hide');
+
 
 	}
 
