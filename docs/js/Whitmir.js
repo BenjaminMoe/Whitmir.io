@@ -131,11 +131,9 @@ const Whitmir = (function() {
 		this.MEM.tiny = await tinymce.init({
       		selector: '#mytextarea',
 			menubar: false,
-			/*
 			toolbar : 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent code',
 			toolbar_sticky : true,
-			*/
-			toolbar : false,
+			// toolbar : false,
 			statusbar : false,
 			plugins: 'spellchecker autoresize code',
 			content_css : 'css/myLayout.css',
@@ -361,7 +359,7 @@ const Whitmir = (function() {
 		// Then we go ahead and create an html file
 		
 		let chapter = {
-			name : name,
+			name : name + '.html',
 			createdOn : Date.now()
 		}
 			
@@ -376,10 +374,11 @@ const Whitmir = (function() {
 		}
 			
 		const mime = {type: 'application/json'};
+		const html = {type: 'text/html'};
 		const form = new FormData();
 
 		form.append('metadata', new Blob([JSON.stringify(fileMetadata)], mime));
-		form.append('file', new Blob(['[]'], mim));
+		form.append('file', new Blob([''], html));
 			
 		const url = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id';
 
