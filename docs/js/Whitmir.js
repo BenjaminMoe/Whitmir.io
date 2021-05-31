@@ -127,18 +127,28 @@ const Whitmir = (function() {
 		this.API.loadClient();
 
 		// Reset Toolbar
-		
-		this.MEM.tiny = await tinymce.init({
-      		selector: '#mytextarea',
-			menubar: false,
-			toolbar : 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent code',
-			toolbar_sticky : true,
-			// toolbar : false,
-			statusbar : false,
-			plugins: 'spellchecker autoresize code',
-			content_css : 'css/myLayout.css',
-			content_style: "body {padding: 0px; margin : 0px;} p { margin-bottom: 30px; }"
-    	});
+	
+		var textarea = document.getElementById('mytextarea');
+		var toolbar = document.getElementById('toolbar');
+
+		console.log(textarea);
+		sceditor.create(textarea, {
+			plugins : 'undo dragdrop',
+			format: 'xhtml',
+			emoticonsEnabled : false,
+			toolbarContainer : toolbar,
+			style: 'lib/sceditor/minified/themes/default.min.css',
+			dragdrop: {
+				allowedTypes: ['image/jpeg', 'image/png'],
+				isAllowed: function(file) {
+					return true;
+				},
+				handlePaste: true,
+				handleFile: function (file, createPlaceholder) {
+
+				}
+			}
+		});
 
 		// Book and Chapter events
 
